@@ -1,18 +1,13 @@
-from keras.datasets import mnist
-from keras.utils import np_utils
+from PIL import Image
 import numpy as np
 import h5py
 
-import matplotlib.pylab as plt
-
 
 def normalization(X):
-
     return X / 127.5 - 1
 
 
 def inverse_normalization(X):
-
     return (X + 1.) / 2.
 
 
@@ -155,9 +150,5 @@ def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_da
 
         Xr = np.concatenate(list_rows, axis=1)
         Xr = Xr.transpose(1,2,0)
-    if Xr.shape[-1] == 1:
-        plt.imshow(Xr[:, :, 0], cmap="gray")
-    else:
-        plt.imshow(Xr)
-    plt.savefig("../../figures/current_batch_%s.png" % suffix)
-    plt.clf()
+    im = Image.fromarray(Xr)
+    im.save("../../figures/current_batch_{}.png".format(suffix))
