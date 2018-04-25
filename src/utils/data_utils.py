@@ -150,5 +150,8 @@ def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_da
 
         Xr = np.concatenate(list_rows, axis=1)
         Xr = Xr.transpose(1,2,0)
+    print 'Xr shape:', Xr.shape
+    print 'Xr max:', np.max(Xr)
+    print 'Xr min', np.min(Xr)
     im = Image.fromarray(Xr)
     im.save("../../figures/current_batch_{}.png".format(suffix))
