@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 import h5py
+import os
 
 
 def normalization(X):
@@ -122,7 +123,7 @@ def get_disc_batch(X_full_batch, X_sketch_batch, generator_model, batch_counter,
     return X_disc, y_disc
 
 
-def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_data_format, suffix):
+def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_data_format, suffix, dirs):
 
     # Generate images
     X_gen = generator_model.predict(X_sketch)
@@ -134,6 +135,11 @@ def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_da
     Xs = X_sketch[:8]
     Xg = X_gen[:8]
     Xr = X_full[:8]
+
+    # Directory to save
+    dir_to_save = dirs + suffix
+    if not os.path.isdir(dir_to_save):
+        os.makedirs(dir_to_save)
 
     if image_data_format == "channels_last":
         X = np.concatenate((Xs, Xg, Xr), axis=0)
@@ -153,10 +159,7 @@ def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_da
 
         Xr = np.concatenate(list_rows, axis=1)
         Xr = Xr.transpose(1,2,0)
-    print
-    print 'Xr shape:', Xr.shape
-    print 'Xr max:', np.max(Xr)
-    print 'Xr min', np.min(Xr)
+
     X = normalize_picture(Xr)
     im = Image.fromarray(X)
-    im.save("../../figures/current_batch_{}.png".format(suffix))
+    im.save("{}/{}.png".format(dir_to_save, suffix))

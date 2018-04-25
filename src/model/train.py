@@ -39,6 +39,10 @@ def train(**kwargs):
     label_flipping = kwargs["label_flipping"]
     dset = kwargs["dset"]
     use_mbd = kwargs["use_mbd"]
+    save_dir = kwargs["save_dir"]
+
+    if not os.path.isdir(save_dir):
+        os.makedirs(save_dir)
 
     epoch_size = n_batch_per_epoch * batch_size
 
@@ -137,10 +141,10 @@ def train(**kwargs):
                 if batch_counter % (n_batch_per_epoch / 2) == 0:
                     # Get new images from validation
                     data_utils.plot_generated_batch(X_full_batch, X_sketch_batch, generator_model,
-                                                    batch_size, image_data_format, "training")
+                                                    batch_size, image_data_format, "{:03}_EPOCH_TRAIN".format(e+1), save_dir)
                     X_full_batch, X_sketch_batch = next(data_utils.gen_batch(X_full_val, X_sketch_val, batch_size))
                     data_utils.plot_generated_batch(X_full_batch, X_sketch_batch, generator_model,
-                                                    batch_size, image_data_format, "validation")
+                                                    batch_size, image_data_format, "{:03}_EPOCH_VALID".format(e+1), save_dir)
 
                 if batch_counter >= n_batch_per_epoch:
                     break
@@ -149,14 +153,21 @@ def train(**kwargs):
             print('Epoch %s/%s, Time: %s' % (e + 1, nb_epoch, time.time() - start))
 
             if e % 5 == 0:
-                gen_weights_path = os.path.join('../../models/%s/gen_weights_epoch%s.h5' % (model_name, e))
-                generator_model.save_weights(gen_weights_path, overwrite=True)
+                pass
+                # save models
+                # gen_weights_path = os.path.join('../../models/%s/gen_weights_epoch%s.h5' % (model_name, e))
+                # generator_model.save_weights(gen_weights_path, overwrite=True)
 
-                disc_weights_path = os.path.join('../../models/%s/disc_weights_epoch%s.h5' % (model_name, e))
-                discriminator_model.save_weights(disc_weights_path, overwrite=True)
+                # disc_weights_path = os.path.join('../../models/%s/disc_weights_epoch%s.h5' % (model_name, e))
+                # discriminator_model.save_weights(disc_weights_path, overwrite=True)
 
-                DCGAN_weights_path = os.path.join('../../models/%s/DCGAN_weights_epoch%s.h5' % (model_name, e))
-                DCGAN_model.save_weights(DCGAN_weights_path, overwrite=True)
+                # DCGAN_weights_path = os.path.join('../../models/%s/DCGAN_weights_epoch%s.h5' % (model_name, e))
+                # DCGAN_model.save_weights(DCGAN_weights_path, overwrite=True)
 
     except KeyboardInterrupt:
         pass
+
+    # save models
+    DCGAN_model.save(save_dir + 'DCGAN.h5')
+    generator_model.save(save_dir + 'GENERATOR.h5')
+    discriminator_model.save(save_dir + 'DISCRIMINATOR.h5')
