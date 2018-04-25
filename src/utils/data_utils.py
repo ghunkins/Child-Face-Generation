@@ -10,6 +10,9 @@ def normalization(X):
 def inverse_normalization(X):
     return (X + 1.) / 2.
 
+def normalize_picture(X):
+    return (X * 255.).astype(np.uint8)
+
 
 def get_nb_patch(img_dim, patch_size, image_data_format):
 
@@ -150,8 +153,10 @@ def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_da
 
         Xr = np.concatenate(list_rows, axis=1)
         Xr = Xr.transpose(1,2,0)
+    print
     print 'Xr shape:', Xr.shape
     print 'Xr max:', np.max(Xr)
     print 'Xr min', np.min(Xr)
-    im = Image.fromarray(Xr)
+    X = normalize_picture(Xr)
+    im = Image.fromarray(X)
     im.save("../../figures/current_batch_{}.png".format(suffix))
