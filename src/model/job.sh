@@ -8,4 +8,4 @@
 #SBATCH --gres=gpu:2
 
 source activate new_pix
-python main.py --backend tensorflow --save_dir /scratch/ghunkins/CUPIDIII_RESULTS/ --dset cupidIII --nb_epoch 200 --generator deconv --img_dim 128 32 32
+python main.py --backend tensorflow --save_dir /scratch/ghunkins/CUPIDV_RESULTS/ --dset cupidV --nb_epoch 200 --generator deconv --img_dim 128 32 32
