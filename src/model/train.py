@@ -40,7 +40,10 @@ def train(**kwargs):
     label_flipping = kwargs["label_flipping"]
     dset = kwargs["dset"]
     use_mbd = kwargs["use_mbd"]
-    save_dir = '_'.join([kwargs["save_dir"], datetime.datetime.now().strftime("%I:%M%p-%B%d-%Y")])
+    # right strip '/' to avoid empty '/' dir
+    save_dir = kwargs["save_dir"].rstrip('/')
+    # join name with current datetime
+    save_dir = '_'.join([save_dir, datetime.datetime.now().strftime("%I:%M%p-%B%d-%Y/")])
 
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
