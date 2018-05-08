@@ -3,6 +3,7 @@ import sys
 import time
 import numpy as np
 import models
+import datetime
 from keras.utils import generic_utils
 from keras.optimizers import Adam, SGD
 import keras.backend as K
@@ -39,7 +40,7 @@ def train(**kwargs):
     label_flipping = kwargs["label_flipping"]
     dset = kwargs["dset"]
     use_mbd = kwargs["use_mbd"]
-    save_dir = kwargs["save_dir"]
+    save_dir = '_'.join([kwargs["save_dir"], datetime.datetime.now().strftime("%I:%M%p-%B%d-%Y")])
 
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
