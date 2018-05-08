@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import json
 import numpy as np
 import models
 import datetime
@@ -47,6 +48,10 @@ def train(**kwargs):
 
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
+
+    # save the config in save dir
+    with open('{0}job_config.json'.format(save_dir), 'w') as fp:
+        json.dump(kwargs, fp, sort_keys=True, indent=4)
 
     epoch_size = n_batch_per_epoch * batch_size
 
